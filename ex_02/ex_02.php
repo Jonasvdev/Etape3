@@ -1,12 +1,12 @@
 <?php
 
 function my_password_hash(string $password): array {
-    
+
     // Générer 16 octets aléatoires
 
     $salt = bin2hex(random_bytes(16));
 
-    // Hacher le mot de passe avec le sel
+    // Hacher le mot de passe avec le sel en utilisant l'algorithme de hachage SHA-512 (indiqué par $6$ dans la fonction crypt)
 
     $hash = crypt($password, '$6$' . $salt . '$');
 
