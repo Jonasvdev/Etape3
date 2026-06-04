@@ -4,14 +4,14 @@ function my_password_hash(string $password): array {
 
     // Générer 16 octets aléatoires
 
-    $salt = bin2hex(random_bytes(16));
+    $salt = bin2hex(random_bytes(16));   // ou // $salt = rand(100000, 999999);
 
     // Hacher le mot de passe avec le sel en utilisant l'algorithme de hachage SHA-512 (indiqué par $6$ dans la fonction crypt)
 
-    $hash = crypt($password, '$6$' . $salt . '$');
+    $hash = crypt($password, '$6$' . $salt . 'f');
 
     return [
-        'hash' => $hash,
+        'hash' => $hash, 
         'salt' => $salt
     ];
 }
@@ -22,6 +22,6 @@ function my_password_verify(string $password, string $salt, string $hash): bool{
 
     // False: Le mot de passe en clair ne correspond pas au hash → mot de passe incorrect
     
-    $newHash = crypt($password, '$6$' . $salt . '$');
+    $newHash = crypt($password, '$6$' . $salt . 'f');
     return $newHash === $hash;
 }
