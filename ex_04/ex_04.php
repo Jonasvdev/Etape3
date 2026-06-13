@@ -44,8 +44,9 @@ if ($argc < 6) {
 $connection = connect_db($host, $username, $passwd, $port, $db);
 
     // Affichage du résultat
+
     if ($connection) {
-        echo "Connexion à la base de données succès\n";
+        echo "Connexion à la base de données réussie\n";
     } else {
         $message = "Erreur de connexion à la base de données\n";
         echo $message;
