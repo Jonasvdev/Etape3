@@ -9,7 +9,7 @@ define('DB_PORT', '3306');
 define('DB_NAME', 'bdd');
 
 // Fonction de connexion
-function connect_db(string $host, string $username, string $passwd, string $port, string $bdd) {
+function connect_db(string $host, string $username, string $passwd, int $port, string $bdd) {
     
 try {
         $connection = new PDO('mysql:host=' . $host . ';port=' . $port . ';dbname=' . $bdd, $username, $passwd);
