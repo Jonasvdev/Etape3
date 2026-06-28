@@ -1,9 +1,9 @@
 <?php
 
-class UsersManager
-{
+class UsersManager {
+
     private $pdo;
-    private string $host;
+    private $host;
     private string $username;
     private string $passwd;
     private $port;
@@ -11,6 +11,7 @@ class UsersManager
     private $currentUser = null;
 
     // Commandes disponibles selon le rôle
+
     private array $adminCommands = ['adduser', 'modifyuser', 'dump', 'deluser', 'makeactive', 'makeinactive', 'help', 'logout', 'quit'];
     private array $userCommands  = ['modifyuser', 'dump', 'help', 'logout', 'quit'];
 
@@ -24,10 +25,11 @@ class UsersManager
     }
 
     // Connexion à la base de données
+
     public function connect(){
 
         try {
-            $this->pdo = new PDO('mysql:host=' . $this->host . ';port=' . $this->port . ';dbname=' . $this->bdd,$this->username,$this->passwd);
+            $this->pdo = new PDO('mysql:host=' . $this->host . ';port=' . $this->port . ';dbname=' . $this->bdd, $this->username,$this->passwd);
             return $this; 
 
         } catch (PDOException $e) {
@@ -41,10 +43,11 @@ class UsersManager
     // Affiche l'invite de commande
     private function prompt(){
         $name = $this->currentUser ? $this->currentUser['name'] : 'guest';
-        echo  $name ;
+        echo '$' . $name . ' '. '@usermanager> '; 
     }
 
     // Authentification de l'utilisateur
+
     private function login(){
         $attempts = 0;
         $maxAttempts = 5;
@@ -101,6 +104,7 @@ class UsersManager
     }
 
     // Boucle principale
+
     public function start(){
         if (!$this->pdo) {
             return;
@@ -158,6 +162,7 @@ class UsersManager
     }
 
     // Ajouter un utilisateur
+    
     private function addUser($args){
 
         if (count($args) < 4) {
@@ -185,8 +190,9 @@ class UsersManager
     }
 
     // Modifier un utilisateur
-    private function modifyUser($args)
-    {
+
+    private function modifyUser($args) {
+
         if (count($args) < 3) {
             echo "\tParamètres incorrects. modifyuser <id> nom|mot_de_passe|rôle <nouvelle_valeur> [<conf_valeur>]\n";
             return;
@@ -205,7 +211,10 @@ class UsersManager
             return;
         }
 
-        // NOT ADM ne peut modifier que ses propres infos
+        // NOT ADM ne peut modifier que ses propre
+        
+
+        // NOT ADM ne peut modifier que ses propress infos
 
         if (!$this->currentUser['is_admin'] && $user['id'] != $this->currentUser['id']) {
             echo "'" . 'modifyuser' . "' : Commande inconnue\n";
@@ -241,8 +250,10 @@ class UsersManager
             file_put_contents('errors.log', $error, FILE_APPEND);
         }
     }
+    
 
     // Afficher les utilisateurs
+    
     private function dump($args){
 
         try {
@@ -265,6 +276,7 @@ class UsersManager
                 if ($exact === 'true') {
                     $query = $this->pdo->prepare('SELECT * FROM users WHERE ' . $filter . ' = ?');
                     $query->execute([$value]);
+
                 } else {
                     $query = $this->pdo->prepare('SELECT * FROM users WHERE ' . $filter . ' LIKE ?');
                     $query->execute(['%' . $value . '%']);
@@ -292,6 +304,7 @@ class UsersManager
     }
 
     // Supprimer un utilisateur
+
     private function delUser($args) {
 
         if (empty($args)) {
@@ -330,6 +343,7 @@ class UsersManager
     }
 
     // Activer ou désactiver un utilisateur
+
     private function setActive($args, $status){
 
         if (empty($args)) {
@@ -361,8 +375,9 @@ class UsersManager
     }
 
     // Aide
+
     private function help($args){
-        
+
         $commands = $this->currentUser['is_admin'] ? $this->adminCommands : $this->userCommands;
 
         $usage = [
@@ -385,7 +400,7 @@ class UsersManager
             }
         }
     }
-}
+    }
 
 // Exécution
 
@@ -398,4 +413,3 @@ $manager->connect()->start();
 
 
 
-?>
